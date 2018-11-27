@@ -35,8 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rbac.apps.RbacConfig',
-    'web.apps.WebConfig'
+    'rbac',
+    'web.apps.WebConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,7 @@ STATICFILES_DIRS = [
 
 # 设置session变量
 PERMISSION_SESSION_KEY = 'crm_url_key'
+MENU_SESSION_KEY = 'menu_key'
 
 # 权限白名单
 VALID_URL_LIST = [
