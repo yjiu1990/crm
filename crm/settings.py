@@ -127,6 +127,7 @@ PERMISSION_SESSION_KEY = 'crm_url_key'
 # 权限白名单
 VALID_URL_LIST = [
     '/login/',
+    '/$',
     '/logout',
     '/admin/.*'
 ]

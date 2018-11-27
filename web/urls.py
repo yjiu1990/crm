@@ -1,9 +1,10 @@
-from django.conf.urls import url
+from django.conf.urls import url,re_path
 from web.views import customer
 from web.views import payment
 from web.views import account
 
 urlpatterns = [
+    url(r'^$',account.login),
     url(r'^customer/list/$', customer.customer_list),
     url(r'^customer/add/$', customer.customer_add),
     url(r'^customer/edit/(?P<cid>\d+)/$', customer.customer_edit),
