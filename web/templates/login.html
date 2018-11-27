@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static '/plugins/bootstrap/css/bootstrap.css' %}">
+    <style type="text/css">
+        .container{
+            margin-top: 150px;
+        }
+        .pull-right{
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3">
+            <form class="form-horizontal" action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="name" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" name="pwd" placeholder="密码">
+                        <span style="color: red" class="pull-right">{{ msg }}</span>
+                    </div>
+
+                </div>
+
+                <input type="submit"  class="btn btn-success pull-right" value="登陆">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
