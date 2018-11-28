@@ -27,10 +27,10 @@ class RbacMiddleware(MiddlewareMixin):
             if re.match(valid, current_url):
                 return None
 
-        print(current_url)
+        # print(current_url)
         # 获取当前用户session中的存放的url
         permission_list = request.session.get(settings.PERMISSION_SESSION_KEY)
-        print('permission', permission_list)
+        # print('permission', permission_list)
         # 如果没有session中不存在当前用户的信息则返回错误
         if not permission_list:
             return HttpResponse('未获取到用户信息，请登陆')

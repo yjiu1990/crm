@@ -15,5 +15,5 @@ def static_menu(request):
     :return:
     """
     menu_list = request.session[settings.MENU_SESSION_KEY]
-
-    return {'menu_list': menu_list}
+    current_url = request.path_info
+    return {'menu_list': menu_list,'current_url':current_url}
