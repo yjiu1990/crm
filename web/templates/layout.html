@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.css' %} "/>
     <link rel="stylesheet" href="{% static 'css/commons.css' %} "/>
     <link rel="stylesheet" href="{% static 'css/nav.css' %} "/>
+    <link rel="stylesheet" href="{% static 'rbac/css/rbac.css' %} "/>
+
     <style>
         body {
             margin: 0;
@@ -91,6 +93,10 @@
             color: #2F72AB;
             border-left: 2px solid #2F72AB;
         }
+
+
+
+
     </style>
 </head>
 <body>
@@ -155,7 +161,7 @@
 <div class="pg-body">
     <div class="left-menu">
         <div class="menu-body">
-            {% static_menu request %}
+            {% multi_menu request %}
         </div>
     </div>
     <div class="right-body">
@@ -174,6 +180,7 @@
 
 <script src="{% static 'js/jquery-3.3.1.min.js' %} "></script>
 <script src="{% static 'plugins/bootstrap/js/bootstrap.js' %} "></script>
+<script src="{% static 'rbac/js/rabc.js' %} "></script>
 {% block js %} {% endblock %}
 </body>
 </html>
