@@ -37,10 +37,11 @@ class RbacMiddleware(MiddlewareMixin):
 
         flag = False
         # 循环session中的url,判断url是否与当前用户访问的url匹配，如果匹配则可以访问，匹配不成功则返回错误信息
-        for url in permission_list:
-            reg = '^%s$' % url
+        for item in permission_list:
+            reg = '^%s$' % item['url']
             if re.match(reg, current_url):
                 flag = True
+                request.current_selected_permission = item['pid'] or item['id']
                 break
         if not flag:
             return HttpResponse('无权访问')
