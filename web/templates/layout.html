@@ -113,7 +113,7 @@
         <div class="left-menu left">
             <a class="menu-item">资产管理</a>
             <a class="menu-item">用户信息</a>
-            <a class="menu-item">路飞管理</a>
+            <a class="menu-item" href="#">路飞管理</a>
             <div class="menu-item">
                 <span>使用说明</span>
                 <i class="fa fa-caret-down" aria-hidden="true"></i>
@@ -165,14 +165,7 @@
         </div>
     </div>
     <div class="right-body">
-        <div>
-            <ol class="breadcrumb no-radius no-margin" style="border-bottom: 1px solid #ddd;">
-
-                <li><a href="#">首页</a></li>
-                <li class="active">客户管理</li>
-
-            </ol>
-        </div>
+         {% record request %}
         {% block content %} {% endblock %}
     </div>
 </div>

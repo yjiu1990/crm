@@ -5,6 +5,7 @@ from django.template import Library
 from django.conf import settings
 
 from collections import OrderedDict
+
 register = Library()
 
 
@@ -28,10 +29,10 @@ def multi_menu(request):
     :return:
     """
 
-    #获取数据库中is_menu为True的URL
+    # 获取数据库中is_menu为True的URL
     menu_dict = request.session[settings.MENU_SESSION_KEY]
-    print(request.current_selected_permission)
-    #将字典进行排序
+
+    # 将字典进行排序
     key_list = sorted(menu_dict)
 
     # 生成空的有序字典
@@ -49,3 +50,21 @@ def multi_menu(request):
 
     return {'menu_dict': ordered_dict}
 
+
+@register.inclusion_tag('rbac/record.html')
+def record(request):
+    record_list = request.url_record
+
+    return {'record_list': record_list}
+
+
+@register.filter
+def has_permission(request, name):
+    '''
+    判断是否有权限
+    :param request:
+    :param name:
+    :return:
+    '''
+    if name in request.session[settings.PERMISSION_SESSION_KEY]:
+        return True

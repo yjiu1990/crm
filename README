@@ -1,0 +1,64 @@
+11-28
+添加功能：动态二级菜单之非菜单默认选中
+    点击某个不能成为菜单的权限时，指定一个可以成为菜单的权限，让其默认选中
+    a.数据库设计
+        1.修改数据库结构，在permission权限表中增加一项pid用来关联菜单，如pid为空表示菜单，非空表示非菜单
+            pid = models.ForeignKey(verbose_name='关联的权限',to='Permission',null=True,blank=True,related_name='parents',help_text='对于非菜单权限需要选择一个可以成为菜单的权限，用户做默认展开和选中菜单',on_delete='')
+
+    b. 思路
+      -  登陆，做权限与菜单的初始化:
+          - 获取菜单信息
+          {
+             1:{
+                'title': '信息管理',
+                'icon': '图标路径',
+                'class':'',
+                 'children':[
+                            {'id': 1, 'title': '账单列表, 'url': '/customer/list/'} #可以做菜单的权限id
+                    ],
+                 },
+             2:.....
+           }
+
+           修改代码部分：
+                node = {'id':item['permission__nid'],'title': item['permission__title'], 'url': item['permission__url']}
+
+          - 获取权限信息
+              {'id': 1, 'url': '/customer/list/', 'pid': None},  #pid为空表示可做菜单
+              {'id': 2, 'url': '/customer/add/', 'pid': 1},      #pid非空表示不可做菜单
+              {'id': 3, 'url': '/customer/edit/\\d+/', 'pid': 1},
+              {'id': 4, 'url': '/customer/del/\\d+/', 'pid': 1},
+              {'id': 5, 'url': '/customer/import/', 'pid': 1},
+              {'id': 6, 'url': '/customer/tpl/', 'pid': 1},
+              {'id': 7, 'url': '/payment/list/', 'pid': None},
+              {'id': 8, 'url': '/payment/add/', 'pid': 7},
+              {'id': 9, 'url': '/payment/edit/\\d+/', 'pid': 7},
+              {'id': 10, 'url': '/payment/del/\\d+/', 'pid': 7}
+
+              修改代码部分：
+                permission_list.append({'id':item['permission__nid'],'url':item['permission__url'],'pid':item['permission__pid']})
+
+      - 再次访问
+          - 中间件进行权限的效验（根据权限信息）
+
+          - 获取id或者pid(应该被选中的可以做菜单的权限id)
+                request.current_selected_permission = item['pid'] or item['id']
+
+      - 模板中使用inclusion_tag动态生成菜单（根据菜单信息进行生成）
+
+
+11-29
+    - 动态菜单之路径导航
+        1.在权限菜单初始化(permission_session里先获取父级的URL与标题：permission__pid__url、permission__pid__title，然后将获取的信息放到session中
+        2.在中间件里进行修改，新增一个url_record列表，然后获取session中的id或pid并将获取到的数据存入到request.current_selected_permission中，然后再判断pid是否为空，为空刚只添加一个url_record.extend([{'title': item['title'], 'url': item['url'],'class':'active'}]),如果有则需要添加两个列表url_record.extend(
+[{'title': item['p_title'], 'url': item['p_url']},{'title': item['title'], 'url': item['url'],'class':'active'},])),并将最新列表传给request.url_record
+        3.在rbac.py里取到request.url_record的值，并将获取的值传给record模板
+        4.在layout模板里使用inclusion_tag去动态生成菜单
+
+    - 权限粒度控制到按钮
+        1.修改数据结构，添加url别名：url_name = models.CharField(verbose_name='url别名',max_length=64,unique=True)
+        2.在permission_session.py(权限菜单初始化)里进行修改数据结构，将permission_list修改成dict字典，然后把获取到的url别名做为permission_dict的key
+        3.再去中间件把permission_list修改成permission_dict，循环字典的vaules值
+        4.去有需要的模板里来进行判断：{% if request|has_permission:'url别名' %}，会将request与has_permission:'url别名'这两个值分为传入给rbac里函数(has_permission),会在此函数里进行判断，如果有权限则返回True
+
+
